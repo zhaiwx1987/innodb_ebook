@@ -50,7 +50,7 @@ InnoDB的每个数据文件都归属于一个表空间，不同的表空间使�
 
 为了管理整个Tablespace，除了索引页外，数据文件中还包含了多种管理页，如下图所示，一个用户表空间大约包含这些页来管理文件，下面会一一进行介绍。
 
-![1](https://oss.aliyuncs.com/yqfiles/6b53416c74ef217bd353aeb5893329775dd1983b.png)
+![1](http://mysql.taobao.org/monthly/pic/2016-02-01/1.png)
 
 
 ####文件链表
@@ -83,7 +83,7 @@ FLST_NODE:
 
 该链表结构是InnoDB表空间内管理所有page的基础结构，下图先感受下，具体的内容可以继续往下阅读。
 
-![2](https://oss.aliyuncs.com/yqfiles/d72be3f2d8bcd50ae490aec335f58c877323075d.png)
+![2](http://mysql.taobao.org/monthly/pic/2016-02-01/2.png)
 
 文件链表管理的相关代码参阅：include/fut0lst.ic, fut/fut0lst.cc
 
@@ -511,7 +511,7 @@ InnoDB当前存在两种形式的压缩页，一种是Transparent Page Compressi
 
 这里我们将所有非独立的数据页统称为系统数据页，主要存储在ibdata中，如下图所示：
 
-![3](https://oss.aliyuncs.com/yqfiles/b9fa76af3b740e1fc30169c0bc4678826b9bd746.png)
+![3](http://mysql.taobao.org/monthly/pic/2016-02-01/3.png)
 
 ibdata的三个page和普通的用户表空间一样，都是用于维护和管理文件页。其他Page我们下面一一进行介绍。
 
@@ -558,7 +558,7 @@ ibdata的第6个page，记录了InnoDB重要的事务系统信息，主要包括
 
 在5.7版本中，回滚段既可以在ibdata中，也可以在独立undo表空间，或者ibtmp临时表空间中，一个可能的分布如下图所示（摘自我之前的[这篇文章](http://mysql.taobao.org/monthly/2015/04/01/)）。
 
-![4](https://oss.aliyuncs.com/yqfiles/ca84249a5e614ba29ea991c71ba9cdb8dfec628f.png)
+![4](http://mysql.taobao.org/monthly/pic/2016-02-01/4.png)
 
 由于是在系统刚启动时初始化事务系统，因此第0号回滚段头页总是在ibdata的第7个page中。
 
@@ -589,7 +589,7 @@ InnoDB最多可以创建128个回滚段，每个回滚段需要单独的Page来�
 
 undo页内结构及其与回滚段头页的关系参阅下图：
 
-![5](https://oss.aliyuncs.com/yqfiles/7a0dc9d9a95599c5c59d3012afa3d19353c723e1.png)
+![5](http://mysql.taobao.org/monthly/pic/2016-02-01/5.png)
 
 关于具体的Undo log如何存储，本文不展开描述，可阅读我之前的这篇文章：[MySQL · 引擎特性 · InnoDB undo log 漫游](http://mysql.taobao.org/monthly/2015/04/01/)
 
@@ -629,13 +629,13 @@ double write buffer存储在ibdata中，你可以从事务系统页(ibdata的第
 
 1. FIL_PAGE_TYPE_BLOB：表示非压缩的外部存储页，结构如下图所示：
 
-![6](https://oss.aliyuncs.com/yqfiles/2e92d4eba7e1fdca3dbb735ede0a36b7322f5eb7.png)
+![6](http://mysql.taobao.org/monthly/pic/2016-02-01/6.png)
 
 2. FIL_PAGE_TYPE_ZBLOB：压缩的外部存储页，如果存在多个blob page，则表示第一个
    FIL_PAGE_TYPE_ZBLOB2：如果存在多个压缩的blob page，则表示blob链随后的page；
    结构如下图所示：
- 
-![7](https://oss.aliyuncs.com/yqfiles/63772104937c75ad3722cdc16443b79c3e8587a7.png) 
+
+![7](http://mysql.taobao.org/monthly/pic/2016-02-01/7.png) 
 
 而在记录内只存储了20个字节的指针以指向外部存储页，指针描述如下：
 
